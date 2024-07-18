@@ -7,7 +7,8 @@ docker run -d \
     --env TWINGATE_REFRESH_TOKEN="<>"  \
     --env TWINGATE_LABEL_HOSTNAME="`hostname`" \
     --env TWINGATE_LABEL_DEPLOYED_BY="docker" \
-    --name "twingate-<connector name>" \
+    --name "twingate-connector-name" \
     --restart=unless-stopped \
     --pull=always \
+    --label com.centurylinklabs.watchtower.enable=true \
     twingate/connector:1
