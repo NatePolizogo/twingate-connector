@@ -1,0 +1,30 @@
+services:
+    twingate_connector:
+        image: "twingate/connector:latest"
+        container_name: twingate-connector-name
+        restart: unless-stopped
+        pull_policy: always
+        sysctls:
+            net.ipv4.ping_group_range: "0 2147483647"
+        environment:
+            TWINGATE_NETWORK: "network name"
+            TWINGATE_ACCESS_TOKEN: ""
+            TWINGATE_REFRESH_TOKEN: ""
+            TWINGATE_LOG_ANALYTICS: v2
+            TWINGATE_LOG_LEVEL: 3
+        logging:
+            driver: syslog
+            options:
+                syslog-address: "udp://localhost:514"
+                syslog-format: "rfc5424"
+                syslog-facility: daemon
+                tag: "twingate-connector-name"
+        labels:
+            - com.centurylinklabs.watchtower.enable=true
+
+    watchtower:
+        image: containrrr/watchtower
+        container_name: watchtower
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        command: --label-enable=true
